@@ -1,0 +1,73 @@
+<h1>Editando: {{user.name}}</h1>
+<form action="/users/update" method="post" class="form">
+{{!-- input do id escondido --}}
+<input type="hidden" name="id" value="{{user.id}}">
+    <div class="form-control">
+        <label for="name">Nome:</label>
+        <input type="text" name="name" placeholder="Insira seu nome" value="{{user.name}}">
+    </div>
+
+    <div class="form-control">
+        <label for="occupation">Profissão:</label>
+        <input type="text" name="occupation" value="{{user.occupation}}">
+    </div>
+
+    <div class="form-control form-checkbox">
+
+        {{!-- verifica se o usuario tinha preenchido ou nao --}}
+        {{#if user.newsletter}}
+        <input type="checkbox" name="newsletter" checked>
+
+        {{else}}
+        <input type="checkbox" name="newsletter">
+        {{/if}}
+
+        <label for="newsletter">Enviar Promoções</label>
+    </div>
+
+    <input type="submit" value="Editar">
+</form>
+
+<div class="addres-container">
+    <h2>Endereços:</h2>
+
+    <form action="/addres/create" method="post">
+    {{!-- input refere-se ao campo criado pelo sequelize na tabela relacionada --}}
+        <input type="hidden" name="UserId" value="{{user.id}}">
+        <div class="form-control">
+            <label for="street">Rua:</label>
+            <input type="text" name="street" placeholder="Digite a sua rua">
+        </div>
+
+        <div class="form-control">
+            <label for="city">Cidade:</label>
+            <input type="text" name="city" placeholder="Digite a sua cidade">
+        </div>
+
+        <div class="form-control">
+            <label for="number">Número:</label>
+            <input type="text" name="number" placeholder="Digite o número do seu endereço">
+        </div>
+
+        <input type="submit" value="Incluir endereço">
+    </form>
+
+    <div class="addres-list">
+        <h2>Lista de endereços:</h2>
+        {{!-- colocar o nome da tabela relacionada --}}
+        {{#each user.Adresses}}
+            <div>
+                #{{this.id}} - {{this.street}} - {{this.number}} - {{this.city}}
+
+                <form action="/address/delete" method="post">
+                    {{!-- input do id escondido --}}
+                    <input type="hidden" name="UserId" value="{{this.UserId}}">
+
+                    {{!-- id do user escondido no form --}}
+                    <input type="hidden" name="id" value="{{this.id}}">
+                    <input type="submit" value="Excluir">
+                </form>
+            </div>
+        {{/each}}
+    </div>
+</div>
